@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>이상을 향한 여정</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FFFFFF;
+    --ink:#171A1F;
+    --muted:#6E7681;
+    --hair:#E4E7EB;
+    --blue:#2D5BE3;
+    --rust:#B4472C;
+    --sand:#B08A1E;
+    --wash:#F3F5F8;
+    --sans:"Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    --serif:"Noto Serif KR","Nanum Myeongjo",serif;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--sans);font-size:16px;line-height:1.75;
+    letter-spacing:-.01em;font-weight:400;
+  }
+  .wrap{max-width:660px;margin:0 auto;padding:0 22px 96px}
+
+  /* ---------- hero ---------- */
+  .hero{padding:64px 0 40px}
+  .hero h1{
+    font-family:var(--serif);font-weight:600;
+    font-size:clamp(30px,8.2vw,46px);line-height:1.28;
+    margin:0 0 18px;letter-spacing:-.02em;
+  }
+  .hero p{margin:0;color:var(--muted);font-size:15.5px;line-height:1.8;max-width:34em}
+  .hero .sub{font-family:var(--serif);font-size:17.5px;line-height:1.6;color:var(--ink);margin:0 0 18px}
+
+  .dial{
+    margin:36px 0 0;padding:22px 20px 18px;
+    border:1px solid var(--hair);border-radius:14px;background:var(--wash);
+  }
+  .dial figure{margin:0}
+  .dial svg{display:block;width:100%;height:auto}
+  .dialrow{display:flex;align-items:center;gap:14px;margin-top:16px}
+  .dialrow label{font-size:13.5px;color:var(--muted);white-space:nowrap}
+  input[type=range]{
+    -webkit-appearance:none;appearance:none;flex:1;height:24px;background:transparent;cursor:pointer;
+  }
+  input[type=range]::-webkit-slider-runnable-track{height:2px;background:#CBD2DA;border-radius:2px}
+  input[type=range]::-moz-range-track{height:2px;background:#CBD2DA;border-radius:2px}
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:22px;height:22px;border-radius:50%;
+    background:var(--ink);margin-top:-10px;border:3px solid var(--paper);
+    box-shadow:0 0 0 1px #C3CAD3;
+  }
+  input[type=range]::-moz-range-thumb{
+    width:16px;height:16px;border-radius:50%;background:var(--ink);border:3px solid var(--paper);
+  }
+  input[type=range]:focus-visible{outline:2px solid var(--blue);outline-offset:4px;border-radius:4px}
+  .readout{
+    margin:14px 0 0;font-family:var(--serif);font-size:16.5px;line-height:1.6;
+    min-height:2.6em;
+  }
+
+  /* ---------- rail + steps ---------- */
+  .journey{position:relative;margin-top:8px}
+  .journey::before{
+    content:"";position:absolute;left:9px;top:14px;bottom:38px;width:1px;background:var(--hair);
+  }
+  .step{position:relative;padding:44px 0 4px 40px}
+  .step .pin{
+    position:absolute;left:0;top:52px;width:19px;height:19px;border-radius:50%;
+    background:var(--paper);border:1px solid var(--hair);
+    display:flex;align-items:center;justify-content:center;
+    font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;
+  }
+  .step h2{
+    font-family:var(--serif);font-weight:600;font-size:21px;line-height:1.45;
+    margin:0 0 10px;letter-spacing:-.015em;
+  }
+  .step p{margin:0 0 14px;font-size:15.5px;line-height:1.85;color:#333941;max-width:34em}
+  .step p.quiet{color:var(--muted);font-size:14.5px}
+  em{font-style:normal;background:linear-gradient(transparent 62%, #DCE4FA 62%);padding:0 1px}
+
+  figure.fig{margin:20px 0 22px;padding:18px 14px 14px;border:1px solid var(--hair);border-radius:12px}
+  figure.fig svg{display:block;width:100%;height:auto}
+  figcaption{margin-top:12px;font-size:13px;line-height:1.7;color:var(--muted);text-align:center}
+
+  /* ---------- matrix ---------- */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0 6px}
+  .cell{
+    border:1px solid var(--hair);border-radius:12px;padding:14px 13px;
+    background:var(--paper);text-align:left;font-family:var(--sans);
+    cursor:pointer;transition:border-color .18s ease, background .18s ease;
+    color:var(--ink);
+  }
+  .cell:hover{border-color:#C7CDD5}
+  .cell[aria-pressed=true]{border-color:var(--ink);background:var(--wash)}
+  .cell:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  .cell b{display:block;font-size:15px;font-weight:600;margin-bottom:4px;letter-spacing:-.01em}
+  .cell span{display:block;font-size:12.5px;line-height:1.6;color:var(--muted)}
+  .cell .tag{margin-top:8px;font-size:12px;font-weight:600}
+  .pushed .tag{color:var(--rust)}
+  .chosen .tag{color:var(--blue)}
+  .axisrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12.5px;color:var(--muted);margin-top:2px}
+  .axisrow div{text-align:center}
+  .detail{
+    margin:14px 0 4px;padding:14px 15px;border-left:2px solid var(--ink);
+    background:var(--wash);border-radius:0 10px 10px 0;
+    font-size:14.5px;line-height:1.8;min-height:3.4em;
+  }
+
+  /* ---------- inline control ---------- */
+  .control{
+    margin:0 0 18px;padding:16px 18px 13px;
+    border:1px solid var(--hair);border-radius:12px;background:var(--wash);
+  }
+  .control .hint,.dial .hint{margin:9px 0 0;font-size:12.5px;line-height:1.6;color:var(--muted)}
+
+  .close{
+    margin-top:52px;padding:30px 24px;border:1px solid var(--ink);border-radius:14px;
+  }
+  .close h2{font-family:var(--serif);font-size:20px;font-weight:600;margin:0 0 12px;line-height:1.5}
+  .close p{margin:0;font-size:15px;line-height:1.85;color:#333941}
+
+  .flow{transition:opacity .25s ease}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  @media (max-width:400px){
+    .step{padding-left:34px}
+    .grid{grid-template-columns:1fr}
+    .axisrow{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>이상을 향한 여정</h1>
+  <p class="sub">우리는 왜 익숙한 삶을 선택하는가</p>
+  <p>사람들은 앞일을 알 수 없는 선택보다 지금의 익숙한 삶을 택한다. 그런데 지금의 삶은 정말 안전한가?</p>
+
+  <div class="dial">
+    <figure>
+      <svg viewBox="0 0 320 150" role="img" aria-label="상태에서 뻗어나가는 여러 갈래가 해상도에 따라 드러나는 그림">
+        <line x1="24" y1="75" x2="132" y2="75" stroke="#171A1F" stroke-width="1.6"/>
+        <circle cx="132" cy="75" r="4" fill="#171A1F"/>
+        <g id="branches" class="flow" opacity="0.06">
+          <path d="M132 75 C200 75 226 30 296 26" fill="none" stroke="#B4472C" stroke-width="1.3"/>
+          <path d="M132 75 C200 75 226 52 296 50" fill="none" stroke="#B08A1E" stroke-width="1.3"/>
+          <path d="M132 75 C200 75 226 100 296 102" fill="none" stroke="#2D5BE3" stroke-width="1.3"/>
+          <path d="M132 75 C200 75 226 124 296 128" fill="none" stroke="#6E7681" stroke-width="1.3"/>
+        </g>
+        <path id="stay" d="M132 75 L296 75" fill="none" stroke="#171A1F" stroke-width="1.6" stroke-dasharray="6 5"/>
+      </svg>
+    </figure>
+    <div class="dialrow">
+      <label for="res">해상도</label>
+      <input id="res" type="range" min="0" max="100" value="8" aria-describedby="readout">
+    </div>
+    <p class="hint">밀어 올리면 보이지 않은 가능성이 보인다.</p>
+    <p class="readout" id="readout">갈래가 하나뿐인 것처럼 보인다. 그래서 안전해 보인다.</p>
+  </div>
+</header>
+
+<div class="journey">
+
+  <section class="step">
+    <div class="pin">1</div>
+    <h2>익숙하다고 안전한 것은 아니다</h2>
+    <p>지금 다니는 회사가 내년에도 있을지 나는 모른다. 지금의 관계가 유지될지도 모른다. 상태가 확실한 게 아니라 <em>불확실성이 눈에 띄지 않게 배치되어</em> 있을 뿐이다.</p>
+    <p>차이는 그려지는 방식에 있다. 사건을 택하려는 순간에는 갈래가 눈앞에 펼쳐진다. 반면 머무를 때는 아무 갈래도 그려지지 않는다.</p>
+    <figure class="fig">
+      <svg viewBox="0 0 320 132" role="img" aria-label="사건 쪽은 갈래가 선명하게 보이고 상태 쪽은 갈래가 흐릿하게 숨어 있는 비교">
+        <text x="80" y="16" text-anchor="middle" font-family="Pretendard Variable, Pretendard, sans-serif" font-size="12" fill="#171A1F">사건</text>
+        <text x="240" y="16" text-anchor="middle" font-family="Pretendard Variable, Pretendard, sans-serif" font-size="12" fill="#171A1F">상태</text>
+        <circle cx="26" cy="70" r="3.5" fill="#171A1F"/>
+        <path d="M26 70 C70 70 84 34 142 32" fill="none" stroke="#171A1F" stroke-width="1.2"/>
+        <path d="M26 70 C70 70 84 58 142 56" fill="none" stroke="#171A1F" stroke-width="1.2"/>
+        <path d="M26 70 C70 70 84 86 142 88" fill="none" stroke="#171A1F" stroke-width="1.2"/>
+        <path d="M26 70 C70 70 84 108 142 112" fill="none" stroke="#171A1F" stroke-width="1.2"/>
+        <line x1="160" y1="24" x2="160" y2="120" stroke="#E4E7EB" stroke-width="1"/>
+        <circle cx="180" cy="70" r="3.5" fill="#171A1F"/>
+        <g opacity="0.13">
+          <path d="M180 70 C224 70 238 34 300 32" fill="none" stroke="#171A1F" stroke-width="1.2"/>
+          <path d="M180 70 C224 70 238 58 300 56" fill="none" stroke="#171A1F" stroke-width="1.2"/>
+          <path d="M180 70 C224 70 238 86 300 88" fill="none" stroke="#171A1F" stroke-width="1.2"/>
+          <path d="M180 70 C224 70 238 108 300 112" fill="none" stroke="#171A1F" stroke-width="1.2"/>
+        </g>
+        <line x1="180" y1="70" x2="300" y2="70" stroke="#171A1F" stroke-width="1.6"/>
+      </svg>
+      <figcaption>같은 수의 갈래가 양쪽에 있다. 오른쪽은 안 보일 뿐이다.</figcaption>
+    </figure>
+  </section>
+
+  <section class="step">
+    <div class="pin">2</div>
+    <h2>사람은 손해보다 ‘얼마나 손해일지 모르는 것’을 더 무서워한다</h2>
+    <p>엘스버그의 실험. 승률 40%인 쪽과 승률을 아예 알 수 없는 쪽을 주면 사람은 후자를 피한다. 40%가 더 나쁠 수도 있는데도 그렇다.</p>
+    <p>상태가 매력적인 이유는 좋아서가 아니다. <em>무지가 앎이라는 착각</em>을 주기 때문이다. 매몰비용과 현상유지 편향은 원인이라기보다 생각하지 않아도 되는 이 상태를 더 무겁게 만드는 증폭기다.</p>
+    <figure class="fig">
+      <svg viewBox="0 0 320 116" role="img" aria-label="확률을 아는 선택지와 확률을 모르는 선택지를 나란히 둔 그림">
+        <rect x="26" y="26" width="116" height="62" rx="8" fill="none" stroke="#171A1F" stroke-width="1"/>
+        <rect x="26" y="63" width="46.4" height="25" rx="0" fill="#DCE4FA"/>
+        <path d="M26 63 h116" stroke="#171A1F" stroke-width="0.8"/>
+        <text x="84" y="50" text-anchor="middle" font-family="Pretendard Variable, Pretendard, sans-serif" font-size="12.5" fill="#171A1F">승률 40%</text>
+        <text x="84" y="106" text-anchor="middle" font-family="Pretendard Variable, Pretendard, sans-serif" font-size="11.5" fill="#6E7681">나쁘지만 계산됨</text>
+        <rect x="178" y="26" width="116" height="62" rx="8" fill="none" stroke="#B4472C" stroke-width="1" stroke-dasharray="5 4"/>
+        <text x="236" y="63" text-anchor="middle" font-family="Noto Serif KR, serif" font-size="24" fill="#B4472C">?</text>
+        <text x="236" y="106" text-anchor="middle" font-family="Pretendard Variable, Pretendard, sans-serif" font-size="11.5" fill="#6E7681">더 나을 수도 있지만 회피됨</text>
+      </svg>
+      <figcaption>사람은 왼쪽을 고른다. 나쁜 확률보다 모르는 확률이 더 무섭다.</figcaption>
+    </figure>
+  </section>
+
+  <section class="step">
+    <div class="pin">3</div>
+    <h2>해상도가 주체성을 가른다</h2>
+    <p>움직인 사람이 다 같은 사람이 아니다. 그리고 머문 사람도 다 같지 않다. 네 칸을 눌러보면 차이가 나온다.</p>
+    <div class="axisrow"><div>낮은 해상도</div><div>높은 해상도</div></div>
+    <div class="grid" id="grid">
+      <button class="cell pushed" data-k="a" aria-pressed="false"><b>밀려난 이동</b><span>상태가 무너져서 움직였다</span><span class="tag">떠밀림</span></button>
+      <button class="cell chosen" data-k="b" aria-pressed="false"><b>택한 이동</b><span>상태의 불확실성까지 봤다</span><span class="tag">선택</span></button>
+      <button class="cell pushed" data-k="c" aria-pressed="false"><b>방치된 머무름</b><span>생각하지 않아도 돼서 남았다</span><span class="tag">떠밀림</span></button>
+      <button class="cell chosen" data-k="d" aria-pressed="false"><b>택한 머무름</b><span>계산하고 남기로 했다</span><span class="tag">선택</span></button>
+    </div>
+    <p class="detail" id="detail">칸을 눌러보세요. 왼쪽 두 칸과 오른쪽 두 칸의 차이는 결과가 아니라 해상도입니다.</p>
+    <p class="quiet">바깥에서 보면 아래 두 칸은 구별되지 않는다. 둘 다 똑같이 안 움직이니까. 그래서 해상도는 행동으로 검증되지 않는다.</p>
+  </section>
+
+  <section class="step">
+    <div class="pin">4</div>
+    <h2>이해관계가 클수록, 움직일 여지는 줄어든다</h2>
+    <p>당사자는 이해관계가 최대인데 에너지가 없어서 밀려난다. 3자는 에너지가 최대인데 이해관계가 없어서 안 움직인다. 그래서 스스로 택한 이동은 드문 게 아니라 <em>타당한 판단에 의한 변화</em>로만 가능하다.</p>
+    <p>협력은 그 가능성을 넓힌다. 실패 비용을 여럿이 나누면 개인의 에너지가 0이어도 합쳐진 에너지는 0이 아니다.</p>
+
+    <figure class="fig">
+      <svg viewBox="0 0 320 190" role="img" aria-label="당사자와 3자 사이에서 이해관계와 에너지가 교차하며 협력이 그 가능성을 넓히는 그래프">
+        <rect id="band" x="150" y="24" width="66" height="112" rx="4" fill="#DCE4FA" opacity="0.55"/>
+        <line x1="24" y1="140" x2="300" y2="140" stroke="#E4E7EB" stroke-width="1"/>
+        <line x1="34" y1="34" x2="290" y2="126" stroke="#B4472C" stroke-width="1.5"/>
+        <line x1="34" y1="126" x2="290" y2="34" stroke="#2D5BE3" stroke-width="1.5"/>
+        <line id="part" x1="34" y1="126" x2="290" y2="34" stroke="#2D5BE3" stroke-width="1.5" stroke-dasharray="5 4" opacity="0"/>
+        <text x="34" y="26" font-family="Pretendard Variable, Pretendard, sans-serif" font-size="11.5" fill="#B4472C">이해관계</text>
+        <text x="34" y="136" font-family="Pretendard Variable, Pretendard, sans-serif" font-size="11.5" fill="#2D5BE3">에너지</text>
+        <text id="plab" x="38" y="119" font-family="Pretendard Variable, Pretendard, sans-serif" font-size="11.5" fill="#2D5BE3" opacity="0">에너지 + 협력</text>
+        <text x="34" y="160" font-family="Pretendard Variable, Pretendard, sans-serif" font-size="12.5" fill="#171A1F">당사자</text>
+        <text x="34" y="177" font-family="Pretendard Variable, Pretendard, sans-serif" font-size="11.5" fill="#6E7681">혼자면 밀려난다</text>
+        <text x="290" y="160" text-anchor="end" font-family="Pretendard Variable, Pretendard, sans-serif" font-size="12.5" fill="#171A1F">3자</text>
+        <text x="290" y="177" text-anchor="end" font-family="Pretendard Variable, Pretendard, sans-serif" font-size="11.5" fill="#6E7681">보기만 한다</text>
+      </svg>
+      <figcaption id="bandcap">두 선이 겹치는 지점에서만 타당한 판단에 의한 변화가 나온다.</figcaption>
+    </figure>
+    <div class="control">
+      <div class="dialrow">
+        <label for="partr">협력</label>
+        <input id="partr" type="range" min="0" max="100" value="0" aria-describedby="bandcap">
+      </div>
+      <p class="hint">밀어 올리면 에너지선이 따라 올라간다.</p>
+    </div>
+    <p class="quiet">역설이 하나 붙는다. 협력 자체가 이미 에너지를 요구한다. 시간, 체력, 당장의 불이익을 감당할 능력. 가장 밀려나기 직전인 사람이 협력 비용을 가장 못 치른다.</p>
+  </section>
+
+  <section class="step">
+    <div class="pin">5</div>
+    <h2>협력은 상대를 당사자로 만든다</h2>
+    <p>협력이 하는 일은 이해관계의 총량을 늘리는 게 아니라 배분을 바꾸는 것이다. 지금까지 물러나 있던 쪽에 <em>이해관계를 부과한다.</em> 뒤집는다는 건 이 뜻이다.</p>
+    <p>그리고 협력은 에너지보다 먼저 해상도를 만든다. 혼자서는 자기 상태가 무너지는 걸 못 본다. 갈래가 안 그려지니까. 같은 자리에 있는 다른 사람의 말을 들어야 내 상태가 관측 가능해진다.</p>
+  </section>
+
+  <section class="step">
+    <div class="pin">6</div>
+    <h2>방향성은 성질이 아니라 조건이다</h2>
+    <p>협력으로 움직인 사람은 익숙한 삶으로 돌아가지 않는다. 다음 사건의 조건을 짓는다. 상태를 거치지 않는 이동이다.</p>
+    <p>다만 덜 밀려나는 쪽으로 저절로 흐르지는 않는다. 협력으로 만든 새 구조도 굳어진다. 굳어지는 순간 그건 다시 관성이 되고, 나중에 들어온 사람은 그 안에서 새로운 당사자가 된다.</p>
+    <figure class="fig">
+      <svg viewBox="0 0 320 172" role="img" aria-label="사건과 협력과 새 구조를 거쳐 방향이 두 갈래로 갈리고 한쪽은 처음으로 되돌아가는 순환">
+        <rect x="104" y="10" width="112" height="34" rx="8" fill="none" stroke="#B4472C" stroke-width="1"/>
+        <text x="160" y="32" text-anchor="middle" font-family="Pretendard Variable, Pretendard, sans-serif" font-size="12.5" fill="#171A1F">사건 — 밀려남</text>
+        <line x1="160" y1="44" x2="160" y2="60" stroke="#171A1F" stroke-width="1"/>
+        <path d="M156 56 L160 62 L164 56" fill="none" stroke="#171A1F" stroke-width="1"/>
+        <rect x="90" y="62" width="140" height="34" rx="8" fill="none" stroke="#2D5BE3" stroke-width="1"/>
+        <text x="160" y="84" text-anchor="middle" font-family="Pretendard Variable, Pretendard, sans-serif" font-size="12.5" fill="#171A1F">협력 — 새 구조</text>
+        <path d="M160 96 L160 108 L74 108 L74 120" fill="none" stroke="#171A1F" stroke-width="1"/>
+        <path d="M70 116 L74 122 L78 116" fill="none" stroke="#171A1F" stroke-width="1"/>
+        <path d="M160 96 L160 108 L246 108 L246 120" fill="none" stroke="#171A1F" stroke-width="1"/>
+        <path d="M242 116 L246 122 L250 116" fill="none" stroke="#171A1F" stroke-width="1"/>
+        <text x="74" y="136" text-anchor="middle" font-family="Pretendard Variable, Pretendard, sans-serif" font-size="12" fill="#2D5BE3">해상도가 갱신됨</text>
+        <text x="74" y="153" text-anchor="middle" font-family="Pretendard Variable, Pretendard, sans-serif" font-size="11.5" fill="#6E7681">덜 밀린다</text>
+        <text x="246" y="136" text-anchor="middle" font-family="Pretendard Variable, Pretendard, sans-serif" font-size="12" fill="#B08A1E">구조가 굳어짐</text>
+        <text x="246" y="153" text-anchor="middle" font-family="Pretendard Variable, Pretendard, sans-serif" font-size="11.5" fill="#6E7681">새 당사자가 생긴다</text>
+        <path d="M292 140 C312 140 312 27 222 27" fill="none" stroke="#B08A1E" stroke-width="1" stroke-dasharray="4 4"/>
+        <path d="M228 23 L221 27 L228 31" fill="none" stroke="#B08A1E" stroke-width="1"/>
+      </svg>
+      <figcaption>노조도 조합도 운동도 이 경로를 지난다. 밀려나지 않기 위한 장치가 누군가를 밀어내는 구조가 된다.</figcaption>
+    </figure>
+  </section>
+
+</div>
+
+<div class="close">
+  <h2>남는 질문</h2>
+  <p>지금 내 삶이 어떤 상태인지 지금도 알고 있는가. 한 번 봤다는 건 지금 보고 있다는 뜻이 아니다. 이상에 다가가는 건 한 번의 도약이 아니라, 해상도를 계속 갱신하는 일에 가깝다.</p>
+</div>
+
+</div>
+
+<script>
+(function(){
+  var res=document.getElementById('res'),
+      br=document.getElementById('branches'),
+      stay=document.getElementById('stay'),
+      out=document.getElementById('readout');
+  var lines=[
+    "갈래가 하나뿐인 것처럼 보인다. 그래서 안전해 보인다.",
+    "뭔가 더 있는 것 같은데 아직 형태가 없다.",
+    "머무는 쪽에도 갈래가 있었다. 안 보였을 뿐이다.",
+    "확실한 상태가 아니라, 보지 않은 상태였다."
+  ];
+  function draw(){
+    var v=+res.value/100;
+    br.setAttribute('opacity',(0.06+v*0.88).toFixed(3));
+    stay.setAttribute('opacity',(1-v*0.55).toFixed(3));
+    out.textContent=lines[v<0.2?0:v<0.5?1:v<0.82?2:3];
+  }
+  res.addEventListener('input',draw); draw();
+
+  var texts={
+    a:"상태가 이미 손실 영역까지 내려앉아서 움직인 경우. 선택이라기보다 남은 선택지가 하나뿐이었다. 계산을 못 한 쪽이다.",
+    b:"머무는 쪽에도 불확실성이 있다는 걸 실제로 본 경우. 생각하지 않아도 되는 상태를 스스로 버렸다. 겉으로는 무모해 보이는데 정반대다.",
+    c:"갈래가 안 그려져서 위험이 없다고 느끼는 경우. 안전해서 남은 게 아니라 생각할 필요가 없었던 쪽이다.",
+    d:"다 보고도 남기로 한 경우. 바깥에서는 방치된 머무름과 구별되지 않는다. 본인만 아는 차이이고, 본인도 착각할 수 있다."
+  };
+  var det=document.getElementById('detail');
+  document.getElementById('grid').addEventListener('click',function(e){
+    var b=e.target.closest('.cell'); if(!b) return;
+    this.querySelectorAll('.cell').forEach(function(c){c.setAttribute('aria-pressed', c===b ? 'true':'false');});
+    det.textContent=texts[b.dataset.k];
+  });
+
+  var pr=document.getElementById('partr'),
+      part=document.getElementById('part'),
+      plab=document.getElementById('plab'),
+      band=document.getElementById('band'),
+      cap=document.getElementById('bandcap');
+  function pdraw(){
+    var v=+pr.value/100, y=126-56*v, o=Math.min(1,v*3.2);
+    part.setAttribute('y1',y.toFixed(1));
+    plab.setAttribute('y',(y-7).toFixed(1));
+    part.setAttribute('opacity',o.toFixed(2));
+    plab.setAttribute('opacity',o.toFixed(2));
+    band.setAttribute('x',(150-54*v).toFixed(1));
+    band.setAttribute('width',(66+54*v).toFixed(1));
+    cap.textContent = v<0.05
+      ? "두 선이 겹치는 지점에서만 타당한 판단에 의한 변화가 나온다."
+      : v<0.6
+        ? "협력이 쌓일수록 에너지선이 올라가고 그 지점이 왼쪽으로 번진다."
+        : "그 지점이 당사자 쪽까지 닿았다. 밀려나지 않고 움직일 수 있다.";
+  }
+  pr.addEventListener('input',pdraw); pdraw();
+})();
+</script>
+</body>
+</html>
